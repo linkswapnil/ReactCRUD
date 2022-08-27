@@ -1,23 +1,70 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import AddStudent from "./AddStudent";
+import "./App.css";
+import { getStudents, deleteStudent, addStudent } from "./service";
+import Students from "./Students";
 
 function App() {
+  const [students, setStudents] = useState([]);
+  const [referesh, setReferesh] = useState(false);
+  const [showAddUserForm, setShowAddUserForm] = useState(false);
+  useEffect(() => {
+    getStudents().then((students) => {
+      setStudents(students);
+    });
+  }, [referesh]);
+
+  const changeStudentName = () => {
+    const newStudentList = students.map((student, index) => {
+      if (index === 0) {
+        student.name = "New name";
+      }
+      return student;
+    });
+    setStudents(newStudentList);
+  };
+
+  const loadNewData = () => {
+    setReferesh(!referesh);
+  };
+
+  const addNewStudent = () => {
+    setShowAddUserForm(true);
+  };
+
+  const deleteStudentAction = (studentId) => {
+    deleteStudent(studentId).then(() => {
+      setReferesh(!referesh);
+    });
+  };
+
+  const onAddUserBackClick = () => {
+    setShowAddUserForm(false);
+  }
+
+  const onAddBtnClick = (student) => {
+    addStudent(student).then(() => {
+      setReferesh(!referesh);
+      setShowAddUserForm(false);
+    });
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {showAddUserForm ? (
+        <AddStudent 
+          onAddUserBackClick={onAddUserBackClick}
+          onAddBtnClick={onAddBtnClick}
+        />
+      ) : (
+        <Students
+          students={students}
+          changeStudentName={changeStudentName}
+          loadNewData={loadNewData}
+          deleteStudent={deleteStudentAction}
+          addNewStudent={addNewStudent}
+        />
+      )}
     </div>
   );
 }
