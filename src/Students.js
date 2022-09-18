@@ -1,7 +1,13 @@
-import './student.css'
+import "./student.css";
 const Students = (props) => {
-  const { students, changeStudentName, loadNewData, deleteStudent, addNewStudent } = props;
-  console.log(students, props);
+  const {
+    students,
+    changeStudentName,
+    loadNewData,
+    deleteStudent,
+    addNewStudent,
+    onEditButtonClick,
+  } = props;
   return (
     <div className="student-list">
       <h1>Students</h1>
@@ -17,11 +23,22 @@ const Students = (props) => {
             >
               delete
             </button>
+            <button
+              onClick={() => {
+                onEditButtonClick(student);
+              }}
+            >
+              Edit Student
+            </button>
           </div>
         );
       })}
       <button onClick={loadNewData}>Refresh</button>
-      <button onClick={addNewStudent}>Add New Student</button>
+      <button
+        onClick={addNewStudent}
+      >
+        Add New Student
+      </button>
     </div>
   );
 };

@@ -25,8 +25,22 @@ async function addStudent(student){
     return students;
 }
 
+async function editStudent(student){
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const response = await fetch(`http://localhost:5555/student/${student.id}`,{
+        headers: myHeaders,
+        method: 'PUT',
+        body: JSON.stringify(student)
+    });
+    const students = await response.json();
+    return students;
+}
+
 export {
     getStudents,
     deleteStudent,
-    addStudent
+    addStudent,
+    editStudent
 }

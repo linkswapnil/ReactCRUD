@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const AddStudent = (props) => {
-  const { onAddUserBackClick, onAddBtnClick } = props;
+  const { onAddStudentBackClick, onAddBtnClick } = props;
   const [name, setName] = useState();
   const [id, setId] = useState();
   const [rollNumber, setRollNumber] = useState();
@@ -40,7 +40,7 @@ const AddStudent = (props) => {
           />
         </div>
       </div>
-      <button onClick={onAddUserBackClick}>Back</button>
+      <button onClick={onAddStudentBackClick}>Back</button>
       <button onClick={()=>{
           onAddBtnClick({
             id: Number(id),

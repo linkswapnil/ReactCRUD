@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
 import AddStudent from "./AddStudent";
 import "./App.css";
-import { getStudents, deleteStudent, addStudent } from "./service";
+import EditStudent from "./EditStudent";
+import { getStudents, deleteStudent, addStudent, editStudent } from "./service";
 import Students from "./Students";
 
 function App() {
   const [students, setStudents] = useState([]);
   const [referesh, setReferesh] = useState(false);
-  const [showAddUserForm, setShowAddUserForm] = useState(false);
+  const [showAddStudentForm, setShowAddStudentForm] = useState(false);
+  const [showEditStudentForm, setShowEditStudentForm] = useState(false);
+  const [studentToEdit, setShowStudentToEdit] = useState(null);
+
   useEffect(() => {
     getStudents().then((students) => {
       setStudents(students);
@@ -29,7 +33,7 @@ function App() {
   };
 
   const addNewStudent = () => {
-    setShowAddUserForm(true);
+    setShowAddStudentForm(true);
   };
 
   const deleteStudentAction = (studentId) => {
@@ -38,22 +42,38 @@ function App() {
     });
   };
 
-  const onAddUserBackClick = () => {
-    setShowAddUserForm(false);
+  const onAddStudentBackClick = () => {
+    setShowAddStudentForm(false);
   }
 
   const onAddBtnClick = (student) => {
     addStudent(student).then(() => {
       setReferesh(!referesh);
-      setShowAddUserForm(false);
+      setShowAddStudentForm(false);
     });
+  }
+
+  const onEditClick = (student) => {
+    editStudent(student).then(() => {
+      setReferesh(!referesh);
+      setShowEditStudentForm(false);
+    });
+  }
+
+  if(showEditStudentForm){
+    return <EditStudent 
+    student={studentToEdit}
+    onEditClick={onEditClick}
+    onEditStudentBackClick={()=>{
+      setShowEditStudentForm(false);
+    }}/>
   }
 
   return (
     <div className="App">
-      {showAddUserForm ? (
+      {showAddStudentForm ? (
         <AddStudent 
-          onAddUserBackClick={onAddUserBackClick}
+          onAddStudentBackClick={onAddStudentBackClick}
           onAddBtnClick={onAddBtnClick}
         />
       ) : (
@@ -63,6 +83,10 @@ function App() {
           loadNewData={loadNewData}
           deleteStudent={deleteStudentAction}
           addNewStudent={addNewStudent}
+          onEditButtonClick={(student)=>{
+            setShowStudentToEdit(student)
+            setShowEditStudentForm(true);
+          }}
         />
       )}
     </div>
